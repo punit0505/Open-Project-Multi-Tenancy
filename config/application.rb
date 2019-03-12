@@ -49,6 +49,7 @@ end
 require 'rails/all'
 require 'active_support'
 require 'active_support/dependencies'
+require 'apartment/elevators/subdomain'
 
 ActiveSupport::Deprecation.silenced = Rails.env.production? && !ENV['OPENPROJECT_SHOW_DEPRECATIONS']
 
@@ -104,6 +105,8 @@ module OpenProject
     # config.autoload_paths += %W(#{config.root}/extras)
     config.enable_dependency_loading = true
     config.autoload_paths << Rails.root.join('lib').to_s
+    config.autoload_paths << Rails.root.join('lib/apartment').to_s
+
     config.autoload_paths << Rails.root.join('lib/constraints').to_s
 
     # Only load the plugins named here, in the order given (default is alphabetical).
@@ -158,7 +161,7 @@ module OpenProject
     # Use SQL instead of Active Record's schema dumper when creating the database.
     # This is necessary if your schema can't be completely dumped by the schema dumper,
     # like if you have constraints or database-specific column types
-    config.active_record.schema_format = :sql
+    # config.active_record.schema_format = :sql
 
     # Load any local configuration that is kept out of source control
     # (e.g. patches).

@@ -50,7 +50,6 @@ class AccountController < ApplicationController
   # Login request and validation
   def login
     user = User.current
-
     if user.logged?
       redirect_after_login(user)
     elsif omniauth_direct_login?
@@ -132,7 +131,7 @@ class AccountController < ApplicationController
       registration_through_invitation!
     else
       if Setting.email_login?
-        params[:user][:login] = params[:user][:mail]
+        params[:user][:login] = params[:user][:login]
       end
 
       self_registration!
@@ -508,7 +507,6 @@ class AccountController < ApplicationController
     @user.activate
     @user.login = session[:auth_source_registration][:login]
     @user.auth_source_id = session[:auth_source_registration][:auth_source_id]
-
     if @user.save
       session[:auth_source_registration] = nil
       self.logged_user = @user
@@ -562,7 +560,6 @@ class AccountController < ApplicationController
   # Pass a block for behavior when a user fails to save
   def register_by_email_activation(user, _opts = {})
     token = Token::Invitation.new(user: user)
-
     if user.save and token.save
       send_activation_email! token
       flash[:notice] = I18n.t(:notice_account_register_done)
@@ -586,7 +583,6 @@ class AccountController < ApplicationController
 
     # Automatic activation
     user.activate
-
     if user.save
       stages = authentication_stages after_activation: true
 
@@ -605,8 +601,13 @@ class AccountController < ApplicationController
       session[:authenticated_user_id] = user.id
       session[:finish_registration] = opts
 
+
+
+
       redirect_to stage.path
     end
+
+
   end
 
   def finish_registration!(user, opts = Hash(session.delete(:finish_registration)))
@@ -625,6 +626,9 @@ class AccountController < ApplicationController
   #
   # Pass a block for behavior when a user fails to save
   def register_manually_by_administrator(user, _opts = {})
+      user.subdomain = user.login
+      Apartment::Tenant.create(user.login)
+      Apartment::Tenant.switch!(user.login)
     if user.save
       # Sends an email to the administrators
       admins = User.admin.active

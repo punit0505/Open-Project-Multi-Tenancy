@@ -149,6 +149,10 @@ gem 'cells-rails', '~> 0.0.9'
 
 gem 'meta-tags', '~> 2.11.0'
 
+# For MultiTenancy
+
+gem 'apartment'
+
 group :production do
   # we use dalli as standard memcache client
   # requires memcached 1.4+
