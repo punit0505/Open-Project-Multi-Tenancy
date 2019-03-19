@@ -114,6 +114,8 @@ gem 'delayed_job_active_record', '~> 4.1.1'
 
 gem 'rack-protection', '~> 2.0.0'
 
+gem 'config'
+
 # Rack::Attack is a rack middleware to protect your web app from bad clients.
 # It allows whitelisting, blacklisting, throttling, and tracking based
 # on arbitrary properties of the request.
